@@ -10,19 +10,15 @@
 % the shift b, to move all line profiles to the centre. 
 % But it turns out that it matters!
 
-%%%%%%%%%%
-% Update %
-%%%%%%%%%%
-% Fix the noise calculation A + normrnd(0, A.^0.5/SN). @25/07/17
-% Remove plotting the time series of Her_Spe. @@25/07/17
-% Introduce the "findpeaks" function -> find the highest few peaks in the periodogram 
+%%%%%%%
+% Fix %
 
 %%%%%%%%%%%%%%
 % Parameters %
 %%%%%%%%%%%%%%
 SN              = 10000;
 N_FILE          = 75;
-ORDER           = 5;                                                        % Highest Hermite order 
+ORDER           = 5;                                                       % Highest Hermite order 
 
 array_order     = 0:ORDER;
 idx_even        = mod(0:ORDER, 2) == 0;
@@ -138,4 +134,50 @@ for order = 0:ORDER
     out_eps = [title_name, '.eps'];
     print(out_eps, '-depsc')
     close(h);    
+end
+
+
+
+
+
+
+
+
+
+
+
+if 0
+% Plot the time series of Her_Spe %
+    for n = 1:N_FILE    
+
+        h1 = figure;
+        RELATIVE = Her_Spe(:, order_odd+1) - repmat(Her_Spe(1, order_odd+1), N_FILE, 1);
+        bar(order_odd, Her_Spe(n, order_odd+1) - Her_Spe(1, order_odd+1), 'r')    
+        ylim([min(min(RELATIVE)) max(max(RELATIVE))])
+        title_name = num2str(MJD(n));
+        title(title_name)
+        % out_eps = ['ODD_', title_name, '.eps'];
+        % print(out_eps, '-depsc')
+        out_jpg = ['ODD_', title_name, '.jpg'];
+        print(out_jpg, '-djpeg')    
+        close(h1)
+
+        h2 = figure;
+        RELATIVE = Her_Spe(:, order_even+1) - repmat(Her_Spe(1, order_even+1), N_FILE, 1);
+        bar(order_even, Her_Spe(n, order_even+1) - Her_Spe(1, order_even+1), 'b')    
+        ylim([min(min(RELATIVE)) max(max(RELATIVE))])
+        title_name = num2str(MJD(n));
+        title(title_name)
+        out_jpg = ['EVEN_', title_name, '.jpg'];
+        print(out_jpg, '-djpeg')
+        % out_eps = ['EVEN_', title_name, '.eps'];
+        % print(out_eps, '-depsc')
+        close(h2)
+
+    end
+
+    array = [MJD'; Her_Spe(:, 1+1)'];
+    fileID = fopen('Her_spe_1.txt','w');
+    fprintf(fileID,'%f %1.20f\n',array);
+    fclose(fileID);
 end
