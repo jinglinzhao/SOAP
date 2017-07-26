@@ -14,8 +14,8 @@
 % Update %
 %%%%%%%%%%
 % Fix the noise calculation A + normrnd(0, A.^0.5/SN). @25/07/17
-% Remove plotting the time series of Her_Spe. @@25/07/17
-% Introduce the "findpeaks" function -> find the highest few peaks in the periodogram 
+% Remove plotting the time series of Her_Spe. @25/07/17
+% Introduce the "findpeaks" function -> find the highest few peaks in the periodogram @25/07/17
 
 %%%%%%%%%%%%%%
 % Parameters %
