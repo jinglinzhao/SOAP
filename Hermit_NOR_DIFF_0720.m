@@ -17,6 +17,9 @@
 % Remove plotting the time series of Her_Spe. @25/07/17
 % Introduce the "findpeaks" function -> find the highest few peaks in the periodogram @25/07/17
 
+% Fix the noise calculation (A + normrnd(0, (1-A).^0.5/SN)). @26/07/17
+% Change A to 1 - importdata(filename);
+
 %%%%%%%%%%%%%%
 % Parameters %
 %%%%%%%%%%%%%%
@@ -54,17 +57,17 @@ for n = 1:N_FILE
     
     i           = n - 1;
     filename    = ['../CCF_dat/ccf', num2str(i), '.dat'];
-    A           = importdata(filename);
+    A           = 1 - importdata(filename);
     A           = A(idx);
-    f           = fit( v, A, 'a*exp(-((x-b)/c)^2)+d', 'StartPoint', [-0.5, 0, 4, 1] );
+    f           = fit( v, A, 'a*exp(-((x-b)/c)^2)+d', 'StartPoint', [0.5, 0, 4, 0] );
     b           = f.b;  % shift    
 
     for order = 0:ORDER
         for shift = 1:SHIFT
-            temp                    = hermite_nor(order, v - V_GRID(shift) + v_planet) * grid_size;
-            temp_rvc                = hermite_nor(order, v - b - V_GRID(shift)) * grid_size;
-            coeff(order+1, shift)   = sum(temp .* (A + normrnd(1, A.^0.5/SN)));     
-            coeff_rvc(order+1, shift) = sum(temp_rvc .* (A + normrnd(0, A.^0.5/SN))); 
+            temp                        = hermite_nor(order, v - V_GRID(shift) + v_planet) * grid_size;
+            temp_rvc                    = hermite_nor(order, v - b - V_GRID(shift)) * grid_size;
+            coeff(order+1, shift)       = sum(temp .* (A + normrnd(0, (1-A).^0.5/SN)));     
+            coeff_rvc(order+1, shift)   = sum(temp_rvc .* (A + normrnd(0, (1-A).^0.5/SN))); 
             % coeff(order+1, shift)   = sum(A .* temp);     
             % coeff_rvc(order+1, shift) = sum(A .* temp_rvc);             
         end

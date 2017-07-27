@@ -5,7 +5,7 @@
 %%%%%%%%%%
 % Update %
 %%%%%%%%%%
-% Introduce the "findpeaks" function -> find the highest few peaks in the periodogram @65/07/17
+% Introduce the "findpeaks" function -> find the highest few peaks in the periodogram @25/07/17
 % Fix the noise calculation (A + normrnd(0, (1-A).^0.5/SN)). @26/07/17
 
 %%%%%%%%%%%%%%
